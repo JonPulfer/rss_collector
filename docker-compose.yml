@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: docker-compose/dockerfiles/server/Dockerfile
+    environment:
+      - PORT=8080
+      - DATABASE_URL=postgres://postgres:secure@database:5432/?sslmode=disable
+      - MIGRATIONS_DIR=migrations
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+  database:
+    image: postgres:13.2
+    environment:
+      - POSTGRES_PASSWORD=secure
+    ports:
+      - "5432:5432"
