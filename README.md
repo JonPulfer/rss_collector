@@ -5,6 +5,15 @@ it collects on creation. Multiple sources can be added. Depending on what the on
 of the service, different approaches could be used to update the feed items for the feed sources.
 Within the service, it could refresh the items after set interval for example.
 
+## Admissions
+
+I have enabled in-memory caching via the middleware in gofiber. This is using the default 1 minute expiry with
+the cache key set to the full request URI (includes query args).
+
+I haven't built this with a microservice architecture as given the time for the task I would not be able to complete
+a correct solution. I have implemented distributed systems using both 2 phase commit and eventual consistency so am 
+aware of the problems faced with distributed transactions and orchestration.
+
 ## 3rd party dependencies
 
 To create the HTTP server, I have used the [gofiber](https://github.com/gofiber/fiber) framework
@@ -18,7 +27,7 @@ would write.
 
 ## Starting
 
-I have create a docker-compose stack of the server and a PostgreSQL database. With Docker installed
+I have created a docker-compose stack of the server and a PostgreSQL database. With Docker installed
 and running, from the root of the repos you can simply run: -
 
 ```shell
@@ -34,7 +43,18 @@ docker-compose up --force-recreate --build
 When the stack has started, the server will be listening on port 8080, this can be changed 
 by changing the PORT envvar in the `docker-compose.yaml` file if necessary.
 
+I haven't specified the networking type so if there are problems connecting to the running services
+from your host, that may be the cause.
+
 ## Usage
+
+The endpoints for this service follow this convention: -
+
+ * `GET /<objects>/` returns all <objects>
+ * `GET /<objects>/:id` returns <object> with :id
+ * `POST /<objects>/` where applicable creates a new object
+ * `PUT /<objects>/:id` updates some detail for the object identified by :id
+ * `DELETE /<objects>/:id` deletes the object identified by :id
 
 ### Adding a feed
 
